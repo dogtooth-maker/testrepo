@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My E-Portfolio</title>
+    <!-- Use Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*
+         * GTA-inspired Color Scheme
+         * Dark background with neon pink, cyan, and purple accents.
+         */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1f1f1f 0%, #0a0a0a 100%);
+            color: #d1d5db; /* Light gray for body text */
+        }
+        .section-container {
+            background-color: rgba(45, 45, 45, 0.7); /* Semi-transparent dark gray */
+            backdrop-filter: blur(8px);
+            padding: 2.5rem;
+            border-radius: 0; /* Made square */
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.2), 0 0 15px rgba(0, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ff69b4; /* Hot pink */
+        }
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #00ffff; /* Pure cyan */
+        }
+        .skill-badge {
+            display: inline-block;
+            background-color: rgba(60, 60, 60, 0.5);
+            color: #fca5a5; /* Light pink */
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #ff69b4;
+        }
+        .project-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 0; /* Made square */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        .work-sample-item {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .work-sample-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.2), 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            border-radius: 0; /* Made square */
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            color: #d1d5db;
+        }
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff69b4;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto py-8">
+        <!-- Header Section -->
+        <header class="text-center mb-12 relative overflow-hidden rounded-none">
+            <canvas id="particle-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+            <div class="relative z-10 p-8">
+                <div class="rounded-none w-24 h-24 mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold">
+                    <!-- A simple 2D drawing of a boy with glasses using SVG -->
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Head -->
+                        <circle cx="50" cy="50" r="40" fill="#fdb813"/>
+                        <!-- Hair -->
+                        <path d="M 15 50 Q 50 10 85 50" fill="none" stroke="#6b4424" stroke-width="10" stroke-linecap="round"/>
+                        <!-- Glasses -->
+                        <circle cx="35" cy="50" r="10" fill="none" stroke="#00ffff" stroke-width="3"/>
+                        <circle cx="65" cy="50" r="10" fill="none" stroke="#00ffff" stroke-width="3"/>
+                        <line x1="45" y1="50" x2="55" y2="50" stroke="#00ffff" stroke-width="3"/>
+                        <!-- Mouth -->
+                        <path d="M 40 65 Q 50 75 60 65" stroke="#ff69b4" fill="none" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-bold text-gray-100 mb-2">Harshit Singh</h1>
+                <p class="text-lg sm:text-xl text-gray-400">Aspiring VLSI Engineer</p>
+            </div>
+        </header>
+
+        <!-- About Me / Personal Statement Section -->
+        <section id="about" class="section-container">
+            <h2>About Me</h2>
+            <p class="text-gray-300 leading-relaxed">
+                I am driven by a curiosity for technology and a commitment to making a positive impact. My academic journey has provided me with a strong foundation in electronics and communication engineering, while my projects and internships have allowed me to apply theoretical knowledge to real-world problems. I am a firm believer in continuous learning and collaboration, and I am always excited to take on new challenges and contribute to innovative teams.
+            </p>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section-container">
+            <h2>Education</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3>Bachelor of electronics and communication engineering</h3>
+                    <p class="text-gray-400">Indian Institute of Information Technology, Sri City</p>
+                    <p class="text-gray-300 mt-1">CPA: 8.07(uptill 4th smeemster)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section-container">
+            <h2>Skills</h2>
+            <div class="flex flex-wrap gap-2">
+                <span class="skill-badge">JavaScript</span>
+                <span class="skill-badge">Python</span>
+                <span class="skill-badge">HTML & CSS</span>
+                <span class="skill-badge">Verilog</span>
+                <span class="skill-badge">React</span>
+                <span class="skill-badge">VHDL</span>
+                <span class="skill-badge">System verilog</span>
+                <span class="skill-badge">Problem-Solving</span>
+                <span class="skill-badge">Teamwork</span>
+            </div>
+        </section>
+
+        <!-- Work Experience / Projects Section -->
+        <section id="projects" class="section-container">
+            <h2>Projects</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <h3 class="text-cyan-400">RISC-V CPU</h3>
+                    <p class="text-gray-400 text-sm mb-2">Verilog- AMD VIVADO</p>
+                    <p class="text-gray-300">Designed and implemented a single-cycle RISC-V CPU core based on the RV32I instruction set. The project includes a Program Counter (PC), Instruction Memory, Register File, and a combinational Arithmetic Logic Unit (ALU). Developed and simulated using Verilog and verified with AMD Vivado. This project demonstrates a strong understanding of processor architecture and the complete HDL-to-simulation workflow.</p>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Achievements & Awards Section -->
+        <section id="achievements" class="section-container">
+            <h2>Achievements & Awards</h2>
+            <ul class="list-disc list-inside space-y-2 text-gray-300">
+                <li>3rd position in IPL Auction</li>
+            </ul>
+        </section>
+        
+
+        <!-- Samples of Work Section -->
+        <section id="samples" class="section-container">
+            <h2>Samples of Work</h2>
+            <div id="work-samples-container" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Samples will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Extracurricular & Volunteering Section -->
+        <section id="extracurricular" class="section-container">
+            <h2>Extracurricular & Volunteering</h2>
+            <ul class="list-disc list-inside space-y-2 text-gray-300">
+                <li>Swimming</li>
+                <li>Table tennis</li>
+                <li>Origami</li>
+            </ul>
+        </section>
+
+        <!-- Resume & References Section -->
+        <section id="resume-references" class="section-container text-center">
+            <h2>Resume & References</h2>
+            <p class="text-gray-300 mb-4">A complete resume is available for download.</p>
+            <a href="#" class="inline-block bg-fuchsia-600 text-white font-bold py-3 px-6 rounded-none hover:bg-fuchsia-700 transition duration-300">
+                Download Resume
+            </a>
+            <p class="text-gray-500 mt-4 text-sm">References available upon request.</p>
+        </section>
+
+        <!-- Contact / Links Section -->
+        <section id="contact" class="section-container">
+            <h2>Contact & Links</h2>
+            <div class="text-center space-x-6 text-gray-300">
+                <a href="mailto:johndoe@email.com" class="hover:text-cyan-400 transition duration-300">
+                    <span class="font-semibold">Email:</span> harshit.singh2022hs@gmail.com
+                <a href="#" target="_blank" class="hover:text-cyan-400 transition duration-300">
+                    <span class="font-semibold">LinkedIn</span>
+                </a>
+                
+            </div>
+        </section>
+
+    </div>
+
+    <!-- The Modal for displaying work samples -->
+    <div id="work-sample-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <div id="modal-content-placeholder"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for work samples. In a real-world app, this might come from an API.
+        const workSamples = [
+            {
+                id: 1,
+                title: 'RISC-V CPU Core',
+                description: 'Designed and implemented a single-cycle RISC-V core, demonstrating proficiency in processor architecture and HDL simulation.',
+                image: 'https://placehold.co/400x300/4b5563/ffffff?text=RISC-V+Core',
+                fullContent: '<h3>RISC-V CPU Core</h3><p>This project involved designing and implementing a single-cycle RISC-V CPU core based on the RV32I instruction set architecture. The design includes a Program Counter (PC), Instruction Memory, a Register File, and a combinational Arithmetic Logic Unit (ALU). All components were coded in Verilog and the full design was simulated and verified using AMD Vivado. This project showcases a deep understanding of computer architecture principles and the complete HDL-to-simulation-to-synthesis workflow.</p>'
+            },
+            {
+                id: 2,
+                title: 'FPGA-based Digital Filter',
+                description: 'A hardware implementation of a digital filter using Verilog, demonstrating knowledge of digital signal processing and FPGA design flow.',
+                image: 'https://placehold.co/400x300/34495e/ffffff?text=FPGA+Filter',
+                fullContent: '<h3>FPGA-based Digital Filter</h3><p>This project involved designing and implementing a digital filter on an FPGA. I chose to implement a <strong>Finite Impulse Response (FIR) filter</strong> in Verilog, which is a core component in many communication and audio processing systems. The design included defining filter coefficients, implementing a series of multiplication-and-accumulation blocks, and optimizing the data path for efficient hardware utilization. This project demonstrates my practical skills in hardware description languages, digital signal processing (DSP) fundamentals, and the full FPGA design flow from RTL to bitstream generation.</p>'
+            },
+            {
+                id: 3,
+                title: 'Phase-Locked Loop (PLL) Design',
+                description: 'Implementation and simulation of a digital PLL for clock synchronization, a critical block in high-speed digital systems.',
+                image: 'https://placehold.co/400x300/1e293b/ffffff?text=PLL+Design',
+                fullContent: '<h3>Phase-Locked Loop (PLL) Design</h3><p>This project focused on the design and simulation of a digital Phase-Locked Loop (PLL), a fundamental block used for clock generation and synchronization in modern VLSI systems. The design includes a <strong>Phase-Frequency Detector (PFD)</strong>, a <strong>Charge Pump</strong>, a <strong>Voltage-Controlled Oscillator (VCO)</strong>, and a <strong>Frequency Divider</strong>. I used SystemVerilog for the behavioral modeling and simulation, focusing on the system-level interactions and feedback mechanisms. This project demonstrates a strong grasp of mixed-signal circuit concepts and their implementation in a digital domain.</p>'
+            }
+        ];
+
+        function loadWorkSamples() {
+            const container = document.getElementById('work-samples-container');
+            if (!container) return; // Add a guard to prevent errors if the element isn't found
+            container.innerHTML = workSamples.map(sample => `
+                <div class="work-sample-item rounded-none overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300" onclick="showModal(${sample.id})">
+                    <img src="${sample.image}" alt="${sample.title}" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="text-lg font-semibold text-gray-900">${sample.title}</h3>
+                        <p class="text-sm text-gray-600 mt-1">${sample.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showModal(id) {
+            const sample = workSamples.find(s => s.id === id);
+            if (!sample) return;
+            const modal = document.getElementById('work-sample-modal');
+            const contentPlaceholder = document.getElementById('modal-content-placeholder');
+            contentPlaceholder.innerHTML = sample.fullContent;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('work-sample-modal');
+            modal.style.display = 'none';
+        }
+
+        // Close the modal if the user clicks outside of the modal content
+        window.onclick = function(event) {
+            const modal = document.getElementById('work-sample-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the page on load
+        window.onload = loadWorkSamples;
+
+        // Particle Animation
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 100;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? '#00ffff' : '#ff69b4';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            let opacity = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        opacity = 1 - (distance / 100);
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        createParticles();
+        animate();
+    </script>
+</body>
+</html>
